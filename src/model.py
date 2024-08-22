@@ -174,7 +174,7 @@ class PromptModel(nn.Module):
         combined_dim = 2 * (self.d_l + self.d_a + self.d_v)
         output_dim = hyp_params.output_dim
 
-        generative_prompt = torch.rand(3, self.prompt_dim, self.prompt_length)
+        generative_prompt = torch.zeros(3, self.prompt_dim, self.prompt_length)
         self.generative_prompt = nn.Parameter(generative_prompt)
 
         self.l2a = MLPLayer(self.orig_d_l, self.prompt_dim)
@@ -214,20 +214,20 @@ class PromptModel(nn.Module):
         )
 
         # modality-signal prompts
-        self.promptl_m = nn.Parameter(torch.rand(self.prompt_dim, self.llen))
-        self.prompta_m = nn.Parameter(torch.rand(self.prompt_dim, self.alen))
-        self.promptv_m = nn.Parameter(torch.rand(self.prompt_dim, self.vlen))
-        self.promptl_nm = nn.Parameter(torch.rand(self.prompt_dim, self.llen))
-        self.prompta_nm = nn.Parameter(torch.rand(self.prompt_dim, self.alen))
-        self.promptv_nm = nn.Parameter(torch.rand(self.prompt_dim, self.vlen))
+        self.promptl_m = nn.Parameter(torch.zeros(self.prompt_dim, self.llen))
+        self.prompta_m = nn.Parameter(torch.zeros(self.prompt_dim, self.alen))
+        self.promptv_m = nn.Parameter(torch.zeros(self.prompt_dim, self.vlen))
+        self.promptl_nm = nn.Parameter(torch.zeros(self.prompt_dim, self.llen))
+        self.prompta_nm = nn.Parameter(torch.zeros(self.prompt_dim, self.alen))
+        self.promptv_nm = nn.Parameter(torch.zeros(self.prompt_dim, self.vlen))
 
         # missing-type prompts
         self.missing_type_prompt = nn.Parameter(
-            torch.rand(3, self.prompt_length, self.prompt_dim)
+            torch.zeros(3, self.prompt_length, self.prompt_dim)
         )
-        self.m_a = nn.Parameter(torch.rand(self.alen, 2 * self.prompt_dim))
-        self.m_v = nn.Parameter(torch.rand(self.vlen, 2 * self.prompt_dim))
-        self.m_l = nn.Parameter(torch.rand(self.llen, 2 * self.prompt_dim))
+        self.m_a = nn.Parameter(torch.zeros(self.alen, 2 * self.prompt_dim))
+        self.m_v = nn.Parameter(torch.zeros(self.vlen, 2 * self.prompt_dim))
+        self.m_l = nn.Parameter(torch.zeros(self.llen, 2 * self.prompt_dim))
 
         # 2. Crossmodal Attentions
         self.trans_l_with_a = self.get_network(self_type="la")
@@ -426,7 +426,7 @@ class PromptModel(nn.Module):
         h_l_with_as = self.trans_l_with_a(proj_x_l, proj_x_a, proj_x_a)
         h_l_with_vs = self.trans_l_with_v(proj_x_l, proj_x_v, proj_x_v)
         h_ls = torch.cat([h_l_with_as, h_l_with_vs], dim=2)
-        h_ls = torch.cat([h_ls, batch_prompt[0]], dim=0)
+        h_ls = torch.cat([h_ls, batch_prompt[0].transpose(0,1)], dim=0)
         h_ls = self.trans_l_mem(h_ls)
         if type(h_ls) == tuple:
             h_ls = h_ls[0]
@@ -435,7 +435,7 @@ class PromptModel(nn.Module):
         h_a_with_ls = self.trans_a_with_l(proj_x_a, proj_x_l, proj_x_l)
         h_a_with_vs = self.trans_a_with_v(proj_x_a, proj_x_v, proj_x_v)
         h_as = torch.cat([h_a_with_ls, h_a_with_vs], dim=2)
-        h_as = torch.cat([h_as, batch_prompt[1]], dim=0)
+        h_as = torch.cat([h_as, batch_prompt[1].transpose(0,1)], dim=0)
         h_as = self.trans_a_mem(h_as)
         if type(h_as) == tuple:
             h_as = h_as[0]
@@ -444,7 +444,7 @@ class PromptModel(nn.Module):
         h_v_with_ls = self.trans_v_with_l(proj_x_v, proj_x_l, proj_x_l)
         h_v_with_as = self.trans_v_with_a(proj_x_v, proj_x_a, proj_x_a)
         h_vs = torch.cat([h_v_with_ls, h_v_with_as], dim=2)
-        h_vs = torch.cat([h_vs, batch_prompt[2]], dim=0)
+        h_vs = torch.cat([h_vs, batch_prompt[2].transpose(0,1)], dim=0)
         h_vs = self.trans_v_mem(h_vs)
         if type(h_vs) == tuple:
             h_vs = h_vs[0]

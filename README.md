@@ -49,7 +49,23 @@ python main.py --dataset "mosei" --data_path "mosei path" --drop_rate 0 --name "
   python main.py --pretrained_model "./pretrained/mosei.pt" --dataset "sims" --data_path "sims path" --drop_rate 0.7 --name "sims.pt"
   ```
 
-  
+
+
+
+## Citation
+
+If you find this repository useful, please cite the following paper:
+```
+@inproceedings{guo2024multimodal,
+  title={Multimodal Prompt Learning with Missing Modalities for Sentiment Analysis and Emotion Recognition},
+  author={Guo, Zirun and Jin, Tao and Zhao, Zhou},
+  booktitle={Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={1726--1736},
+  year={2024}
+}
+```
+
+
 
 ## Acknowledgements
 
