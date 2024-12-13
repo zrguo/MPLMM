@@ -21,6 +21,9 @@ class SIMSData(Dataset):
 
     def get_dim(self):
         return self.orig_dims
+    
+    def get_seq_len(self):
+        return self.data['text'][0].shape[0], self.data['audio'][0].shape[0], self.data['vision'][0].shape[0]
 
     def __len__(self):
         return self.data['audio'].shape[0]

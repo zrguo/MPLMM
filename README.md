@@ -21,6 +21,12 @@ The development of multimodal models has significantly advanced multimodal senti
 git clone https://github.com/zrguo/MPLMM.git
 ```
 
+### Datasets
+
+The extracted features are provided under the corresponding repositories of the papers cited in the raw feature extraction part of our paper, and can be downloaded directly. 
+
+Additionally, MPLMM can be extended to other datasets and backbones, not limited to the MSA task. Therefore, you can also use your own datasets or any feature extraction methods, as long as you make sure that the dataset class has the corresponding  `get_dim`, `get_seq_len` and `get_missing_mode` functions. For feature extraction tool, you can refer to [Tool](https://github.com/thuiar/MMSA-FET) for more information.
+
 ### Run the Code
 
 1. Pre-train the model on CMU-MOSEI without prompts
@@ -49,13 +55,15 @@ python main.py --dataset "mosei" --data_path "mosei path" --drop_rate 0 --name "
   python main.py --pretrained_model "./pretrained/mosei.pt" --dataset "sims" --data_path "sims path" --drop_rate 0.7 --name "sims.pt"
   ```
 
+*This is a reconstructed code base. If you find any errors, please pose an issue or contact the authors.*
+
 
 
 
 ## Citation
 
 If you find this repository useful, please cite the following paper:
-```
+```bibtex
 @inproceedings{guo2024multimodal,
   title={Multimodal Prompt Learning with Missing Modalities for Sentiment Analysis and Emotion Recognition},
   author={Guo, Zirun and Jin, Tao and Zhao, Zhou},
